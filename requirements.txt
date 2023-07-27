@@ -1,0 +1,32 @@
+The package requirements for this Python program are as follows:
+
+1. tweepy: This package is used for accessing the Twitter API.
+
+2. nltk: This package is used for natural language processing tasks, such as tokenization, lemmatization, and sentiment analysis.
+
+3. numpy: This package is used for numerical computations in Python.
+
+4. pandas: This package is used for data manipulation and analysis.
+
+5. matplotlib: This package is used for data visualization, specifically for creating plots and charts.
+
+6. textblob: This package provides an easy-to-use interface for performing sentiment analysis.
+
+7. wordcloud: This package is used for generating word clouds, which visualize the frequency of words in a text.
+
+To install these packages, you can use the following command:
+
+```
+pip install tweepy nltk numpy pandas matplotlib textblob wordcloud
+```
+
+Additionally, you will need to download the required NLTK data:
+
+```
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('punkt')
+```
+
+Please note that the Twitter API credentials should be provided by the user and are not directly related to the package requirements.
