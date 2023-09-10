@@ -22,6 +22,8 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 # Scraping and storing data from Twitter
+
+
 def scrape_tweets(query, count):
     tweets = []
     try:
@@ -40,11 +42,13 @@ def scrape_tweets(query, count):
         print("Error : " + str(e))
 
 # Preprocessing data
+
+
 def preprocess_tweet(tweets):
     stop_words = stopwords.words('english')
     lemmatizer = WordNetLemmatizer()
     preprocessed_tweets = []
-    
+
     for tweet in tweets:
         tweet_lower = tweet['text'].lower()
         tweet_clean = re.sub(r"http\S+|www\S+|https\S+", "", tweet_lower)
@@ -52,17 +56,19 @@ def preprocess_tweet(tweets):
         tweet_tokens = word_tokenize(tweet_punct)
         tweet_lem = [lemmatizer.lemmatize(word) for word in tweet_tokens]
         tweet_filtered = [word for word in tweet_lem if word not in stop_words]
-        
+
         tweet['text'] = ' '.join(tweet_filtered)
         preprocessed_tweets.append(tweet)
-    
+
     return preprocessed_tweets
 
 # Sentiment analysis using TextBlob
+
+
 def get_sentiment(tweet_text):
     blob = TextBlob(tweet_text)
     sentiment = blob.sentiment.polarity
-    
+
     if sentiment > 0:
         return 'positive'
     elif sentiment < 0:
@@ -71,38 +77,44 @@ def get_sentiment(tweet_text):
         return 'neutral'
 
 # Real-time sentiment analysis
+
+
 def real_time_analysis(query, count):
     tweets = scrape_tweets(query, count)
     preprocessed_tweets = preprocess_tweet(tweets)
     sentiment_df = pd.DataFrame(preprocessed_tweets)
-    
+
     # Plotting sentiment distribution
     sentiment_count = sentiment_df['sentiment'].value_counts()
     sentiment_count.plot(kind='bar', title='Sentiment Distribution')
     plt.xlabel('Sentiment')
     plt.ylabel('Count')
-    
+
     # Word cloud visualization
-    positive_tweets = sentiment_df[sentiment_df['sentiment'] == 'positive']['text']
-    positive_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(positive_tweets))
+    positive_tweets = sentiment_df[sentiment_df['sentiment']
+                                   == 'positive']['text']
+    positive_wordcloud = WordCloud(
+        width=800, height=400, background_color='white').generate(' '.join(positive_tweets))
     plt.figure(figsize=(10, 5))
     plt.imshow(positive_wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.title('Positive Sentiments Word Cloud')
-    
-    negative_tweets = sentiment_df[sentiment_df['sentiment'] == 'negative']['text']
-    negative_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(negative_tweets))
+
+    negative_tweets = sentiment_df[sentiment_df['sentiment']
+                                   == 'negative']['text']
+    negative_wordcloud = WordCloud(
+        width=800, height=400, background_color='white').generate(' '.join(negative_tweets))
     plt.figure(figsize=(10, 5))
     plt.imshow(negative_wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.title('Negative Sentiments Word Cloud')
-    
+
     # Sentiment insights summary
     positive_count = sentiment_count['positive']
     negative_count = sentiment_count['negative']
     neutral_count = sentiment_count['neutral']
     total_count = positive_count + negative_count + neutral_count
-    
+
     print("Sentiment Insights Summary:")
     print("Total Tweets:", total_count)
     print("Positive Tweets:", positive_count)
@@ -111,6 +123,7 @@ def real_time_analysis(query, count):
     print("Positive %:", round(positive_count / total_count * 100, 2))
     print("Negative %:", round(negative_count / total_count * 100, 2))
     print("Neutral %:", round(neutral_count / total_count * 100, 2))
+
 
 # Example usage
 query = 'social media marketing'
